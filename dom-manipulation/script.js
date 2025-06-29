@@ -91,37 +91,34 @@
 
 //     // body.appendChild(createAddQuoteForm());
 
-
-/* ---------- Quote Data ---------- */
 const quotes = [
   { text: "The only limit to our realization of tomorrow is our doubts of today.", category: "Motivational" },
-  { text: "Life is 10% what happens to us and 90% how we react to it.",            category: "Inspirational" },
-  { text: "The best way to predict the future is to create it.",                  category: "Wisdom" },
-  { text: "You miss 100% of the shots you don’t take.",                           category: "Sports" },
+  { text: "Life is 10% what happens to us and 90% how we react to it.", category: "Inspirational" },
+  { text: "The best way to predict the future is to create it.", category: "Wisdom" },
+  { text: "You miss 100% of the shots you don’t take.", category: "Sports" },
   { text: "Success is not final, failure is not fatal: It is the courage to continue that counts.", category: "Leadership" }
 ];
 
-/* ---------- DOM References ---------- */
-const quoteDisplay   = document.getElementById("quoteDisplay");
-const quoteInput     = document.getElementById("newQuoteText");
-const categoryInput  = document.getElementById("newQuoteCategory");
-const showBtn        = document.getElementById("newQuote");     // “Show New Quote” button
+const quoteDisplay = document.getElementById("quoteDisplay");
+const quoteInput = document.getElementById("newQuoteText");
+const categoryInput = document.getElementById("newQuoteCategory");
+const showBtn = document.getElementById("newQuote");
 
-/* ---------- Display Logic ---------- */
-function displayRandomQuote() {
+function showRandomQuote() {
   if (quotes.length === 0) {
-    quoteDisplay.textContent = "No quotes available.";
+    quoteDisplay.innerHTML = "No quotes available.";
     return;
   }
 
   const randomIndex = Math.floor(Math.random() * quotes.length);
-  const { text, category } = quotes[randomIndex];
-  quoteDisplay.textContent = `"${text}" — ${category}`;
+  const quote = quotes[randomIndex];
+
+  // Use innerHTML as required
+  quoteDisplay.innerHTML = `"${quote.text}" — <em>${quote.category}</em>`;
 }
 
-/* ---------- Add‑Quote Logic ---------- */
 function addQuote() {
-  const text     = quoteInput.value.trim();
+  const text = quoteInput.value.trim();
   const category = categoryInput.value.trim();
 
   if (!text || !category) {
@@ -129,20 +126,15 @@ function addQuote() {
     return;
   }
 
-  quotes.push({ text, category });      // add to array
+  quotes.push({ text, category });
   alert("Quote added successfully!");
 
   quoteInput.value = "";
   categoryInput.value = "";
 
-  displayRandomQuote();                 // refresh DOM so user sees the new quote pool
+  showRandomQuote(); // show newly updated list
 }
 
-/* ---------- Event Wiring ---------- */
-showBtn.addEventListener("click", displayRandomQuote);
-
-// Expose addQuote for inline HTML button: <button onclick="addQuote()">Add Quote</button>
-window.addQuote = addQuote;
-
-/* ---------- Initial State ---------- */
-displayRandomQuote();   // show a random quote on first load
+showBtn.addEventListener("click", showRandomQuote);
+window.addQuote = addQuote; // make available for onclick in HTML
+showRandomQuote(); // show one on page load
