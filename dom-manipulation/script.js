@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   restoreFilter();
   showRandomQuote();
   setupEventListeners();
-  startServerSync(); // periodic sync with mock server
+  setInterval(fetchQuotesFromServer, 20000); // Periodic server sync
 });
 
 function loadQuotes() {
@@ -88,18 +88,11 @@ function restoreFilter() {
   }
 }
 
-function startServerSync() {
-  // Every 20 seconds, simulate fetching from "server"
-  setInterval(() => {
-    simulateServerFetch();
-  }, 20000);
-}
-
-function simulateServerFetch() {
+function fetchQuotesFromServer() {
   fetch("https://jsonplaceholder.typicode.com/posts")
     .then(res => res.json())
-    .then(serverData => {
-      const serverQuotes = serverData.slice(0, 5).map(post => ({
+    .then(data => {
+      const serverQuotes = data.slice(0, 5).map(post => ({
         text: post.title,
         category: "Server"
       }));
@@ -113,7 +106,7 @@ function simulateServerFetch() {
       }
     })
     .catch(() => {
-      notifyUser("Failed to sync with server.");
+      notifyUser("Failed to fetch quotes from server.");
     });
 }
 
